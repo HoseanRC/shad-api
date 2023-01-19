@@ -1,6 +1,6 @@
 <p align="center">
-    <a href="github.address">
-        <img src="https://github.com/HoseanRC/shad-api/blob/master/Shad-Bot.png?raw=true" alt="Shadpy" width="128">
+    <a href="https://github.com/HoseanRC/shad-api">
+        <img src="https://user-images.githubusercontent.com/68903522/213505965-348da778-36c3-42e0-a31b-7f8711cf18ef.png" alt="Shadpy" width="128">
     </a>
     <br>
     <b>Shad API Framework for Python</b>
@@ -89,9 +89,9 @@ identity (bot API alternative) using Python.
 pip3 install shadapi
 ```
 
-### Thanks to:
+## Thanks to:
 
-## shayanheidari01
+### shayanheidari01
 
 he did an awesome job at making a rubika library which helped alot to make this project!
 https://github.com/shayanheidari01/rubika

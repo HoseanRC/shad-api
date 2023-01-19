@@ -1,4 +1,6 @@
+LICENSE
 README.md
+pyproject.toml
 setup.py
 shadapi/__init__.py
 shadapi/util.py
