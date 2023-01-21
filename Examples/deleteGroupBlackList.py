@@ -1,4 +1,4 @@
-from rubpy import Client, Methods
+from shadapi import Client, Methods
 
 app = Client(auth='your_auth')
 group_guid = 'your_group_guid'

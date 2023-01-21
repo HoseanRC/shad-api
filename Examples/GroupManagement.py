@@ -1,4 +1,4 @@
-from rubpy import Client, exceptions
+from shadapi import Client, exceptions
 
 app = Client(auth='auth-key')
 group_guid = "group_guid"

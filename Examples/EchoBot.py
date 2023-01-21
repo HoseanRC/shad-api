@@ -1,4 +1,4 @@
-from rubpy import Client
+from shadapi import Client
 
 app = Client('auth')
 

@@ -4,6 +4,8 @@ from random import choice, randint
 from urllib3 import PoolManager
 from ...crypto import Crypto
 from time import sleep
+from threading import Timer
+import asyncio
 
 __all__ = (
     'Connections',
@@ -83,21 +85,30 @@ class WebSocket:
         data = {
             'api_version': '5',
             'auth': self.auth,
+            'data': '',
             'method': 'handShake',
         }
         wss = await self.connections.getdcmess(self.session, ws=True)
 
         async for websocket in connect(choice(wss)):
+            wsTimer = None
             try:
                 await websocket.send(dumps(data))
+                def _testSocket(ws):
+                    async def _(ws):
+                        await ws.send(('0'))
+                    asyncio.run(_(ws))
+                wsTimer = _RepeatingTimer(30, _testSocket, websocket)
+                wsTimer.start()
                 while True:
-                    await websocket.send(('0'))
                     data = await websocket.recv()
-                    sleep(0.200)
                     if data != '{"status":"OK","status_det":"OK"}':
                         yield loads(data)
                     else: continue
-            except ConnectionClosed: continue
+            except ConnectionClosed:
+                if wsTimer != None:
+                    wsTimer.cancel()
+                continue
 
     async def updatesHandler(self, chat_updates=False, message_updates=True, show_notifications=False):
         handSnake1, handSnake2 = self.handSnake, self.handSnake
@@ -118,3 +129,25 @@ class WebSocket:
                         if 'show_notifications' in data:
                             for i in data.get('show_notifications'):
                                 yield i
+
+class _RepeatingTimer(object):
+
+    def __init__(self, interval, f, *args, **kwargs):
+        self.interval = interval
+        self.f = f
+        self.args = args
+        self.kwargs = kwargs
+
+        self.timer = None
+
+    def callback(self):
+        self.f(*self.args, **self.kwargs)
+        self.start()
+
+    def cancel(self):
+        self.timer.cancel()
+
+    def start(self):
+        self.timer = Timer(self.interval, self.callback)
+        self.timer.start()
+
