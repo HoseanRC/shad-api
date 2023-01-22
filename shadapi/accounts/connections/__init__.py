@@ -96,7 +96,10 @@ class WebSocket:
                 await websocket.send(dumps(data))
                 def _testSocket(ws):
                     async def _(ws):
-                        await ws.send(('0'))
+                        try:
+                            await ws.send(('0'))
+                        finally:
+                            pass
                     asyncio.run(_(ws))
                 wsTimer = _RepeatingTimer(30, _testSocket, websocket)
                 wsTimer.start()
@@ -108,6 +111,7 @@ class WebSocket:
             except ConnectionClosed:
                 if wsTimer != None:
                     wsTimer.cancel()
+                    wsTimer = None
                 continue
 
     async def updatesHandler(self, chat_updates=False, message_updates=True, show_notifications=False):
