@@ -3,6 +3,7 @@ from .connections import WebSocket
 from aiohttp import ClientSession
 from asyncio import run as RUN
 from .handler import Message
+from time import sleep
 
 __all__ = ('_Client')
 
@@ -393,6 +394,38 @@ class _Client:
                 async for update in ws.updatesHandler():
                     await func(methods, Message(methods, message=update))
         RUN(runner())
+
+    def updateHandler(self, delay):
+        function = delay
+        if type(delay) != int:
+            delay = 5
+        def inner(func):
+            async def runner():
+                async with ClientSession() as session:
+                    methods = Methods(self.auth, session=session, account_guid=self.account_guid)
+                    self.methods = methods
+                    if self.account_guid != None:
+                        account_info = await methods.getUserInfo(self.account_guid)
+                        self.account_info = account_info.get('user')
+                    #ws = WebSocket(self.auth, session=session)
+                    #async for update in ws.updatesHandler():
+                    #    await func(methods, Message(methods, message=update))
+                    while True:
+                        chats = await methods.getChats()
+                        for chat in chats:
+                            unseen_count = chat.get('count_unseen') 
+                            if unseen_count > 0:
+                                chat_guid = chat.get('object_guid')
+                                messages = await methods.getMessagesFromMax(chat_guid, chat.get('last_message_id'))
+                                for message in messages[:unseen_count][::-1]:
+                                    if message['author_object_guid'] == self.account_guid: continue
+                                    await func(methods, Message(methods, message = {'object_guid':chat_guid, 'message_id': message['message_id'], 'message': message}))
+                                    await methods.seenChats({chat_guid: message['message_id']})
+                        sleep(delay)
+
+            RUN(runner())
+        if type(function) != int:
+            inner(function)
 
     def run(self, func):
         async def runner():

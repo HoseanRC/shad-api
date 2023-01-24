@@ -22,6 +22,8 @@
 
 > Elegant, modern and asynchronous Shad API framework in Python for users and bots
 ### Accounts
+
+**WebSocket Handler:**
 ``` python
 from shadapi import Client
 
@@ -30,7 +32,29 @@ app = Client('my_account_auth')
 @app.handler
 async def my_bot(bot, message):
     await message.reply('``Hello`` __from__ **Shad Api**!')
+```
 
+**Messages Update Handler:**
+``` python
+from shadapi import Client
+
+app = Client('my_account_auth')
+
+@app.updateHandler
+async def my_bot(bot, message):
+    await message.reply('``Hello`` __from__ **Shad Api**!')
+```
+**OR**
+``` python
+from shadapi import Client
+
+app = Client('my_account_auth')
+
+update_delay = 5 # in seconds
+
+@app.updateHandler(update_delay)
+async def my_bot(bot, message):
+    await message.reply('``Hello`` __from__ **Shad Api**!')
 ```
 
 **Another example:**
@@ -94,7 +118,7 @@ pip3 install shadapi
 ### broken message handler
 
 when using this library for fethcing messages from a chat, the library will start a WebSocket channel with the server, and because of the present lag in the server, some of the messages will not be sent by the server and wont be processed by the client (this is not an issue with the library, it's from the server! this problem also do exist in the Android and Web versions of Shad)
-we can kindof fix this problem by loading every last message every once in a while to ensure that the client have recived every message, but this would make the bot use more internet (around 277MB per day for maden requests every 2 seconds). the problem with this bypass is that the server would consider that as "request spam" (aka DDOS) and will refuse to response to most of the requests, and this would make the bot pretty much slower! i would still implement this functionality in the library and write with the addition of "request delay", but until shad devs fix the main issue inside the server or until i find an actuall bypass solution, this are the only ways to handle messages in this library.
+we can kindof fix this problem by loading every last message every once in a while to ensure that the client have recived every message, but this would make the bot use more internet (around 277MB per day for maden requests every 2 seconds). the problem with this bypass is that the server would consider that as "request spam" (aka DDOS) and will refuse to response to most of the requests, and this would make the bot pretty much slower! i did implement this functionality in the library and with the addition of "request delay", but until shad devs fix the main issue inside the server or until i find an actuall bypass solution, this are the only ways to handle messages in this library.
 
 | Request method         | advantages                | disadvantage          |
 |------------------------|---------------------------|-----------------------|
