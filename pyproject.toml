@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "shadapi"
-version = "0.1.2"
+version = "0.2.0"
 description = "Read the latest Real Python tutorials"
 readme = "README.md"
 authors = [{ name = "HoseanRC" }]

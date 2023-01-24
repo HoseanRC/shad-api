@@ -16,7 +16,7 @@ with open("README.md", encoding="UTF-8") as f:
 
 setup(
     name = 'shadapi',
-    version = '0.1.2',
+    version = '0.2.0',
     author='HoseanRC',
     author_email = '',
     description = 'This is an unofficial library and fastest library for deploying robots on Shad accounts.',
