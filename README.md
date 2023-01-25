@@ -107,11 +107,23 @@ identity (bot API alternative) using Python.
 - **Async**: Fully asynchronous (also usable synchronously if wanted, for convenience).
 - **Powerful**: Full access to Shad's API to execute any official client action and more.
 
-### Installing
+## Setup
+
+### Installation
 
 ``` bash
 pip3 install shadapi
 ```
+
+### Obtaining the User token
+
+(Note: this process has to be done in a pc)
+1. Enter [Web Shad](https://web.shad.ir)
+2. After logging in, press F12 or Ctrl-Shift-I to enter the devtools
+3. Open the "Network" tab
+4. Open a chat or send a message to log it in devtools
+5. Select a request from the list which it's domain starts with "shadmessenger"
+6. Inside the "Request" tab, there is a part called "auth" which stores your token in a string type
 
 ## Notes
 
